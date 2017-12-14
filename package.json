@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "del": "^3.0.0",
     "request": "^2.83.0",
     "wallpaper": "^2.6.0"
   }
