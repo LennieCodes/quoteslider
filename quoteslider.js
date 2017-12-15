@@ -3,39 +3,45 @@ const fs = require('fs');
 const request = require('request');
 const config = require('./quoteslider.config.js');
 const del = require('del');
-const interval = 60000;
-const path = '/Users/Lenny/Documents/applications/quoteslider/tmp/';
-let index = 0;
-let filename =  'wallpaper-' + index + '.jpg';
-let fullpath = path + filename;
+const createHash = require('hash-generator');
+let filename = '';
 
-// wrap in setInterval Function
 
-main();
-
-setInterval(main, interval);
 
 function main() {
-    const imageNum = randomIntFromInterval(485, 5000000);
+    if (config.shouldDelete) {
+        del(path + '*.jpg').then(quoteSlider);
+    }
+    else {
+        quoteSlider();    
+    }
+}
 
-    del(path + '*.jpg').then(function() {
-        
-        request('https://quotefancy.com/download/' + imageNum + '/original/wallpaper.jpg')
-        .pipe(fs.createWriteStream(fullpath))
-        .on('finish', setWallpaper)
-        .then(function() {
-            filename = index === 0 ?  'wallpaper-' + 1 + '.jpg' :  'wallpaper-' + 0 + '.jpg'; // wallpaper won't change unless image name is different.
-            index = index === 0 ? 1 : 0;
-            fullpath = path + filename;
-        }); 
-       
-    });
+
+
+function quoteSlider() {
+    const imageNum = randomIntFromInterval(485, 5000000);
+    
+    while (config.oldHash === config.newHash) {
+        config.newHash = createHash(config.hashLength);
+    }
+
+    config.oldHash = config.newHash;
+    config.filename = 'wallpaper-' + config.newHash + '.jpg';
+
+    request('https://quotefancy.com/download/' + imageNum + '/original/wallpaper.jpg')
+    .pipe(fs.createWriteStream(config.path + config.filename))
+    .on('finish', setWallpaper);
+}
+
+function finish() {
+    setWallpaper();
+    setTimeout(main, config.interval);
 }
 
 function setWallpaper() {
-    return wallpaper.set(fullpath).then(() => {
+    return wallpaper.set(config.path + config.filename).then(() => {
         console.log('wallpaper replaced');
-
     });
 }
 
