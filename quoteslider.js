@@ -10,7 +10,7 @@ main();
 
 function main() {
     if (config.shouldDelete) {
-        del(path + '*.jpg').then(quoteSlider);
+        del(config.downloadPath + '*.jpg').then(quoteSlider);
     }
     else {
         quoteSlider();    
@@ -28,7 +28,7 @@ function quoteSlider() {
     config.filename = 'wallpaper-' + config.newHash + '.jpg';
 
     request('https://quotefancy.com/download/' + imageNum + '/original/wallpaper.jpg')
-    .pipe(fs.createWriteStream(config.path + config.filename))
+    .pipe(fs.createWriteStream(config.downloadPath + config.filename))
     .on('finish', finish);
 }
 
@@ -38,7 +38,7 @@ function finish() {
 }
 
 function setWallpaper() {
-    return wallpaper.set(config.path + config.filename).then(() => {
+    return wallpaper.set(config.downloadPath + config.filename).then(() => {
         console.log('wallpaper replaced');
     });
 }
