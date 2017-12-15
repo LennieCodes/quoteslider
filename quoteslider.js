@@ -6,7 +6,7 @@ const del = require('del');
 const createHash = require('hash-generator');
 let filename = '';
 
-
+main();
 
 function main() {
     if (config.shouldDelete) {
@@ -16,8 +16,6 @@ function main() {
         quoteSlider();    
     }
 }
-
-
 
 function quoteSlider() {
     const imageNum = randomIntFromInterval(485, 5000000);
@@ -31,7 +29,7 @@ function quoteSlider() {
 
     request('https://quotefancy.com/download/' + imageNum + '/original/wallpaper.jpg')
     .pipe(fs.createWriteStream(config.path + config.filename))
-    .on('finish', setWallpaper);
+    .on('finish', finish);
 }
 
 function finish() {
