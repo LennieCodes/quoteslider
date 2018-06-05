@@ -1,8 +1,7 @@
 const config = {
     downloadPath: './tmp/',
     filename: '',
-    interval: 10000,
-    shouldDelete: false,
+    shouldDelete: true,
     oldHash: '',
     newHash: '',
     hashLength: 4

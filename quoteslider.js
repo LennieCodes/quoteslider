@@ -34,7 +34,6 @@ function quoteSlider() {
 
 function finish() {
     setWallpaper();
-    setTimeout(main, config.interval);
 }
 
 function setWallpaper() {
